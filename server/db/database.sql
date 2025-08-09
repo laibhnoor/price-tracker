@@ -1,9 +1,10 @@
--- database.sql
-
--- Users (optional, for later personalization)
+-- Users table
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL
+  full_name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Products being tracked
@@ -21,13 +22,5 @@ CREATE TABLE IF NOT EXISTS price_history (
   product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
   price NUMERIC NOT NULL,
   checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Wishlist: Which user is tracking which product (optional for now)
-CREATE TABLE IF NOT EXISTS wishlists (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
-  UNIQUE (user_id, product_id)
 );
 

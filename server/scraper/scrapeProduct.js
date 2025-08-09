@@ -1,26 +1,32 @@
 const puppeteer = require('puppeteer');
 
 async function scrapeProduct(url) {
-  const browser = await puppeteer.launch({ headless: 'new' });
-  const page = await browser.newPage();
+  let browser;
+  try {
+    browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
 
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
 
-  // ✅ Wait for price element to load
-  await page.waitForSelector('.pdp-price', { timeout: 10000 });
+    await page.waitForSelector('.pdp-price', { timeout: 10000 });
 
-  const result = await page.evaluate(() => {
-    const name = document.querySelector('h1')?.innerText || 'No name';
+    const result = await page.evaluate(() => {
+      const name = document.querySelector('h1')?.innerText || 'No name';
+      const priceText = document.querySelector('.pdp-price')?.innerText || 'Rs. 0';
+      const imageElement = document.querySelector('.gallery-preview-panel__image');
+      const imageUrl = imageElement?.src || imageElement?.getAttribute('data-src') || '';
 
-    const priceEl = document.querySelector('.pdp-price');
-    const priceText = priceEl ? priceEl.innerText : 'Rs. 0';
+      const price = Number(priceText.replace(/[^0-9]/g, ''));
+      return { name, price, imageUrl };
+    });
 
-    const price = Number(priceText.replace(/[^\d]/g, ''));
-    return { name, price };
-  });
-
-  await browser.close();
-  return result;
+    return result;
+  } catch (error) {
+    console.error('Error scraping product:', error);
+    return null;
+  } finally {
+    if (browser) await browser.close();
+  }
 }
 
 module.exports = scrapeProduct;

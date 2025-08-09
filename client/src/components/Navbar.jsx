@@ -17,11 +17,11 @@ const Navbar = ({ toggleTheme, isLoggedIn, currentUser, onLogout }) => {
   };
 
   // Your backend sends `profile_image_url`, but let's check for it safely
-  const profileImage = currentUser?.profile_image_url || '/assets/profile.jpg';
+  const profileImage = currentUser?.profile_image_url || '/assets/profile.png';
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">PriceWise</div>
+      <div className="navbar-brand">Daraz PriceWise</div>
       <div className="navbar-right">
         <ThemeToggler toggleTheme={toggleTheme} />
         <div className="profile-section">

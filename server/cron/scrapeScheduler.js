@@ -6,7 +6,7 @@ require('dotenv').config();
 
 
 // ⏱️ Run every 30 seconds
-cron.schedule('*/30 * * * * *', async () => {
+cron.schedule('*/80 * * * * *', async () => {
   console.log('🔁 Cron job running at', new Date().toLocaleTimeString());
 
   try {
